@@ -1,6 +1,7 @@
 package com.example.raeven.popularmovies;
 
 import android.content.Context;
+import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -22,14 +23,32 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private ArrayList<MovieModel> mMovieDataList = new ArrayList<MovieModel>();
     private Context mContext;
+    private MovieOnClickListener mMovieOnCLickListener;
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder{
+    public MovieAdapter(MovieOnClickListener movieOnClickListener){
+        mMovieOnCLickListener = movieOnClickListener;
+    }
+
+    public interface MovieOnClickListener{
+        void movieOnClick(MovieModel movieDetailsObject);
+    }
+
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView iv_moviePoster;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             iv_moviePoster = (ImageView)itemView.findViewById(R.id.iv_moviePoster);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            MovieModel movieDetailsObject = mMovieDataList.get(position);
+            mMovieOnCLickListener.movieOnClick(movieDetailsObject);
+
         }
     }
 

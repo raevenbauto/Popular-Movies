@@ -1,6 +1,8 @@
 package com.example.raeven.popularmovies.Model;
 
-public class MovieModel {
+import java.io.Serializable;
+
+public class MovieModel implements Serializable{
 
     private int id;
     private double voteAverage;
