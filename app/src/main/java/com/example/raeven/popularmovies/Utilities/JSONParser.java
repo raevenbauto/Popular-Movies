@@ -13,6 +13,8 @@ import java.util.ArrayList;
 public class JSONParser {
 
     public static final String STATIC_IMAGE_LINK = "http://image.tmdb.org/t/p/w185/";
+    public static final String STATIC_BACK_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
+
 
     public static ArrayList<MovieModel> getJSONData(String urlResponse) throws JSONException {
         ArrayList<MovieModel> movieDataList = new ArrayList<MovieModel>();
@@ -28,7 +30,7 @@ public class JSONParser {
             String title = movieJSONObject.getString("title");
             String mainPosterLink = (STATIC_IMAGE_LINK + movieJSONObject.getString("poster_path"));
             String originalTitle = movieJSONObject.getString("original_title");
-            String backPosterLink = (STATIC_IMAGE_LINK + movieJSONObject.getString("backdrop_path"));
+            String backPosterLink = (STATIC_BACK_IMAGE_LINK + movieJSONObject.getString("backdrop_path"));
             String overview = movieJSONObject.getString("overview");
             String releaseDate = movieJSONObject.getString("release_date");
 
