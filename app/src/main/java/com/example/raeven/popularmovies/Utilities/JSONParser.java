@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class JSONParser {
 
-    public static final String STATIC_IMAGE_LINK = "http://image.tmdb.org/t/p/w185/";
+    public static final String STATIC_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
     public static final String STATIC_BACK_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
 
 
