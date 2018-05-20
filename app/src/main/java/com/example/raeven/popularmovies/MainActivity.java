@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.example.raeven.popularmovies.Model.MovieModel;
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
 
+    private final String POPULAR_MOVIE_TITLE = "Popular Movies";
+    private final String TOP_RATED_MOVIE_TITLE = "Top Rated Movies";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,47 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
         new MovieJSONQuery().execute(NetworkUtils.createURL(1));
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.movie_menu, menu);
+        menu.findItem(R.id.item_popularMovie).setEnabled(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+            case R.id.item_popularMovie:
+                new MovieJSONQuery().execute(NetworkUtils.createURL(1));
+                setTitle(POPULAR_MOVIE_TITLE);
+                item.setEnabled(false);
+                return true;
+
+            case R.id.item_topRated:
+                new MovieJSONQuery().execute(NetworkUtils.createURL(2));
+                setTitle(TOP_RATED_MOVIE_TITLE);
+                item.setEnabled(false);
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (getTitle() == POPULAR_MOVIE_TITLE){
+            menu.findItem(R.id.item_topRated).setEnabled(true);
+        }
+
+        else if (getTitle() == TOP_RATED_MOVIE_TITLE){
+            menu.findItem(R.id.item_popularMovie).setEnabled(true);
+        }
+
+        return true;
     }
 
     private void declareViews(){

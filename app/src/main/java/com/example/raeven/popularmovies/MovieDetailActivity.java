@@ -26,7 +26,7 @@ public class MovieDetailActivity extends AppCompatActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         declareViews();
         myMovieData = (MovieModel) getIntent().getSerializableExtra("myMovieDetails");
-
+        setTitle(myMovieData.getTitle());
         setValues(myMovieData);
     }
 

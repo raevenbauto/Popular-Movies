@@ -32,7 +32,7 @@ public class JSONParser {
             String originalTitle = movieJSONObject.getString("original_title");
             String backPosterLink = (STATIC_BACK_IMAGE_LINK + movieJSONObject.getString("backdrop_path"));
             String overview = movieJSONObject.getString("overview");
-            String releaseDate = movieJSONObject.getString("release_date");
+            String releaseDate = dateConvert(movieJSONObject.getString("release_date"));
 
             MovieModel movieObject = new MovieModel(id, voteAverage, title, mainPosterLink, originalTitle, backPosterLink,
                                                        overview, releaseDate);
@@ -41,5 +41,63 @@ public class JSONParser {
         }
 
         return movieDataList;
+    }
+
+    public static String dateConvert(String releaseDate){
+        String convertedDate = "";
+        String[] splitDate = releaseDate.split("-");;
+
+        switch(Integer.parseInt(splitDate[1])){
+            case 1:
+                convertedDate = "Jan";
+                break;
+
+            case 2:
+                convertedDate = "Feb";
+                break;
+
+            case 3:
+                convertedDate = "Mar";
+                break;
+
+            case 4:
+                convertedDate = "Apr";
+                break;
+
+            case 5:
+                convertedDate = "May";
+                break;
+
+            case 6:
+                convertedDate = "June";
+                break;
+
+            case 7:
+                convertedDate = "July";
+                break;
+
+            case 8:
+                convertedDate = "Aug";
+                break;
+
+            case 9:
+                convertedDate = "Sept";
+                break;
+
+            case 10:
+                convertedDate = "Oct";
+                break;
+
+            case 11:
+                convertedDate = "Nov";
+                break;
+
+            case 12:
+                convertedDate = "Dec";
+                break;
+        }
+
+        convertedDate = convertedDate.concat(" " + splitDate[2] + ", "+ splitDate[0]);
+        return convertedDate;
     }
 }
