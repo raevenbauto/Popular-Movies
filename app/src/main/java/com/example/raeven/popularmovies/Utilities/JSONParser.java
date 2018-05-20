@@ -1,7 +1,5 @@
 package com.example.raeven.popularmovies.Utilities;
 
-import android.util.Log;
-
 import com.example.raeven.popularmovies.Model.MovieModel;
 
 import org.json.JSONArray;
@@ -12,8 +10,8 @@ import java.util.ArrayList;
 
 public class JSONParser {
 
-    public static final String STATIC_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
-    public static final String STATIC_BACK_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
+    private static final String STATIC_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
+    private static final String STATIC_BACK_IMAGE_LINK = "http://image.tmdb.org/t/p/w780/";
 
 
     public static ArrayList<MovieModel> getJSONData(String urlResponse) throws JSONException {
@@ -43,7 +41,7 @@ public class JSONParser {
         return movieDataList;
     }
 
-    public static String dateConvert(String releaseDate){
+    private static String dateConvert(String releaseDate){
         String convertedDate = "";
         String[] splitDate = releaseDate.split("-");;
 

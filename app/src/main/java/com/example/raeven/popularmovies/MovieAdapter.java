@@ -1,10 +1,8 @@
 package com.example.raeven.popularmovies;
 
 import android.content.Context;
-import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +13,7 @@ import android.widget.TextView;
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
 
@@ -72,7 +67,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         String movieImageLink = mMovieDataList.get(position).getMainPosterLink();
-        String movieTitle = mMovieDataList.get(position).getTitle().toString();
+        String movieTitle = mMovieDataList.get(position).getTitle();
         Log.d("My Title", movieTitle);
         Picasso.with(mContext).load(movieImageLink).into(holder.iv_moviePoster);
         holder.tv_movieTitle.setText(movieTitle);

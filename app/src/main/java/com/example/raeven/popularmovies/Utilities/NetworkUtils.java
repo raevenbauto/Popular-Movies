@@ -1,8 +1,6 @@
 package com.example.raeven.popularmovies.Utilities;
 
 import android.net.Uri;
-import android.util.Log;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,13 +16,13 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     //http://api.themoviedb.org/3/movie/popular?api_key=
-    public static final String STATIC_URL = "http://api.themoviedb.org";
-    public static final String STATIC_NUM = "3";
-    public static final String STATIC_MOVIE = "movie";
-    public static final String STATIC_POPULAR = "popular";
-    public static final String STATIC_TOP_RATED = "top_rated";
-    public static final String PARAM_API_KEY_QUERY = "api_key";
-    public static final String PARAM_API_KEY = "3c308b4b3b69940fdeecb1a8561ef61b";
+    private static final String STATIC_URL = "http://api.themoviedb.org";
+    private static final String STATIC_NUM = "3";
+    private static final String STATIC_MOVIE = "movie";
+    private static final String STATIC_POPULAR = "popular";
+    private static final String STATIC_TOP_RATED = "top_rated";
+    private static final String PARAM_API_KEY_QUERY = "api_key";
+    private static final String PARAM_API_KEY = "3c308b4b3b69940fdeecb1a8561ef61b";
 
     public static URL createURL(int sortType){
         URL url = null;
