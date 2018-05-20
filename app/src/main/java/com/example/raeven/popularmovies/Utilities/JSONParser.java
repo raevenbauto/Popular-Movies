@@ -1,5 +1,7 @@
 package com.example.raeven.popularmovies.Utilities;
 
+import android.util.Log;
+
 import com.example.raeven.popularmovies.Model.MovieModel;
 
 import org.json.JSONArray;
@@ -24,7 +26,7 @@ public class JSONParser {
             JSONObject movieJSONObject = movieResultsJSONArray.getJSONObject(i);
 
             int id = Integer.parseInt(movieJSONObject.getString("id"));
-            double voteAverage = Double.parseDouble(movieJSONObject.getString("vote_average"));
+            String voteAverage = movieJSONObject.getString("vote_average") + "/10";
             String title = movieJSONObject.getString("title");
             String mainPosterLink = (STATIC_IMAGE_LINK + movieJSONObject.getString("poster_path"));
             String originalTitle = movieJSONObject.getString("original_title");

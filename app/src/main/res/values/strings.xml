@@ -7,6 +7,7 @@
     <string name="movie_description">Movie Description</string>
     <string name="popular_movie">Popular Movies</string>
     <string name="top_rated">Top Rated Movies</string>
+    <string name="vote_average">10/10</string>
 
 
 </resources>

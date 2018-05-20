@@ -2,11 +2,14 @@ package com.example.raeven.popularmovies;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 public class MovieDetailActivity extends AppCompatActivity  {
 
@@ -16,6 +19,7 @@ public class MovieDetailActivity extends AppCompatActivity  {
     private TextView tv_title;
     private TextView tv_releaseDate;
     private TextView tv_movieDesc;
+    private TextView tv_voteAverage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +27,7 @@ public class MovieDetailActivity extends AppCompatActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         declareViews();
         myMovieData = (MovieModel) getIntent().getSerializableExtra("myMovieDetails");
+        Log.d("Vote Average", myMovieData.getVoteAverage());
         setTitle(myMovieData.getTitle());
         setValues(myMovieData);
     }
@@ -33,6 +38,7 @@ public class MovieDetailActivity extends AppCompatActivity  {
         tv_title = (TextView) findViewById(R.id.tv_movieTitle);
         tv_releaseDate = (TextView) findViewById(R.id.tv_releaseDate);
         tv_movieDesc = (TextView) findViewById(R.id.tv_movieDescription);
+        tv_voteAverage = (TextView) findViewById(R.id.tv_voteAverage);
     }
 
     private void setValues(MovieModel myMovieData){
@@ -41,6 +47,6 @@ public class MovieDetailActivity extends AppCompatActivity  {
         tv_title.setText(myMovieData.getTitle());
         tv_releaseDate.setText(myMovieData.getReleaseDate());
         tv_movieDesc.setText(myMovieData.getOverview());
-
+        tv_voteAverage.setText(myMovieData.getVoteAverage());
     }
 }

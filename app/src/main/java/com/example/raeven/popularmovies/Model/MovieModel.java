@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class MovieModel implements Serializable{
 
     private int id;
-    private double voteAverage;
+    private String voteAverage;
     private String title;
     private String mainPosterLink;
     private String originalTitle;
@@ -13,7 +13,7 @@ public class MovieModel implements Serializable{
     private String overview;
     private String releaseDate;
 
-    public MovieModel(int id, double voteAverage, String title, String mainPosterLink, String originalTitle,
+    public MovieModel(int id, String voteAverage, String title, String mainPosterLink, String originalTitle,
                         String backPosterLink, String overview, String releaseDate){
         this.id = id;
         this.title = title;
@@ -22,6 +22,7 @@ public class MovieModel implements Serializable{
         this.backPosterLink = backPosterLink;
         this.overview = overview;
         this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
     }
 
     public int getId() {
@@ -32,11 +33,11 @@ public class MovieModel implements Serializable{
         this.id = id;
     }
 
-    public double getVoteAverage() {
+    public String getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(double voteAverage) {
+    public void setVoteAverage(String voteAverage) {
         this.voteAverage = voteAverage;
     }
 
