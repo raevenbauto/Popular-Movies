@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
-        new MovieJSONQuery().execute(NetworkUtils.createURL(2));
+        new MovieJSONQuery().execute(NetworkUtils.createURL(1));
     }
 
     private void declareViews(){

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MovieDetailActivity"
-    android:background="#DCDCDC">
+    android:background="#404040">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -63,7 +63,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_mainPoster" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_mainPoster"
+                android:textColor="#FFFFFF"/>
 
 
             <TextView
@@ -79,7 +80,8 @@
                 android:text="@string/release_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_movieTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_movieTitle"
+                android:textColor="#FFFFFF"/>
 
             <TextView
                 android:id="@+id/tv_movieDescription"
@@ -95,7 +97,8 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_releaseDate" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_releaseDate"
+                android:textColor="#FFFFFF"/>
         </android.support.constraint.ConstraintLayout>
 
 

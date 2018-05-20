@@ -5,6 +5,7 @@ import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView iv_moviePoster;
+        public TextView tv_movieTitle;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             iv_moviePoster = (ImageView)itemView.findViewById(R.id.iv_moviePoster);
+            tv_movieTitle = (TextView)itemView.findViewById(R.id.tv_mainTitle);
             itemView.setOnClickListener(this);
         }
 
@@ -69,7 +72,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         String movieImageLink = mMovieDataList.get(position).getMainPosterLink();
+        String movieTitle = mMovieDataList.get(position).getTitle().toString();
+        Log.d("My Title", movieTitle);
         Picasso.with(mContext).load(movieImageLink).into(holder.iv_moviePoster);
+        holder.tv_movieTitle.setText(movieTitle);
     }
 
     @Override
