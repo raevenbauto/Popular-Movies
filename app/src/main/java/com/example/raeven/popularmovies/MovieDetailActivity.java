@@ -11,6 +11,11 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+/*
+    Credits to Maxim Basinski for the Star image. 
+
+
+ */
 public class MovieDetailActivity extends AppCompatActivity  {
 
     private MovieModel myMovieData;
