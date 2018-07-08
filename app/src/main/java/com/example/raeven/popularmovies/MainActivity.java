@@ -1,13 +1,11 @@
 package com.example.raeven.popularmovies;
 
-import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
 
-import android.content.Loader;
-import android.os.AsyncTask;
-import android.os.Parcelable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.example.raeven.popularmovies.Utilities.JSONParser;
@@ -28,7 +25,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieOnClickListener, LoaderManager.LoaderCallbacks<String> {
+
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieOnClickListener,
+        LoaderManager.LoaderCallbacks<ArrayList<MovieModel>>{
 
     private ImageView mMoviePoster;
     private RecyclerView mRecyclerView;
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static int DISABLE_MENU_ITEM = 0;
 
     private static final int MOVIE_SEARCH_LOADER = 1;
-
+    private Bundle urlBundle = new Bundle();
 
 
     @Override
@@ -65,27 +64,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             String title = savedInstanceState.getString(TITLE_EXTRA_KEY);
             setTitle(title);
 
-            String url = savedInstanceState.getString(URL_EXTRA_KEY);
-
-            try {
-                new MovieJSONQuery().execute(new URL (url));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
             int menuID = savedInstanceState.getInt(MENU_DISABLE_KEY);
             DISABLE_MENU_ITEM = menuID;
+
+            getSupportLoaderManager().restartLoader(MOVIE_SEARCH_LOADER, savedInstanceState, this);
         }
 
         else {
             POPULAR_URL = NetworkUtils.createURL(1).toString();
             setTitle(POPULAR_MOVIE_TITLE);
 
-            try {
-                new MovieJSONQuery().execute(new URL (POPULAR_URL));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            urlBundle.putString(URL_EXTRA_KEY, POPULAR_URL);
+            LoaderManager loaderManager = getSupportLoaderManager();
+            loaderManager.initLoader(MOVIE_SEARCH_LOADER, urlBundle,  this);
         }
 
 
@@ -111,22 +102,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         switch(item.getItemId()){
             case R.id.item_popularMovie:
                 POPULAR_URL = NetworkUtils.createURL(1).toString();
-                try {
-                    new MovieJSONQuery().execute(new URL (POPULAR_URL));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                urlBundle.putString(URL_EXTRA_KEY, POPULAR_URL);
+                getSupportLoaderManager().restartLoader(MOVIE_SEARCH_LOADER, urlBundle, this);
                 setTitle(POPULAR_MOVIE_TITLE);
                 item.setEnabled(false);
                 return true;
 
             case R.id.item_topRated:
                 TOP_RATED_URL = NetworkUtils.createURL(2).toString();
-                try {
-                    new MovieJSONQuery().execute(new URL(TOP_RATED_URL));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                urlBundle.putString(URL_EXTRA_KEY, TOP_RATED_URL);
+                getSupportLoaderManager().restartLoader(MOVIE_SEARCH_LOADER, urlBundle, this);
                 setTitle(TOP_RATED_MOVIE_TITLE);
                 item.setEnabled(false);
                 return true;
@@ -163,8 +148,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public Loader<String> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<String>(this) {
+    public Loader<ArrayList<MovieModel>> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ArrayList<MovieModel>>(this) {
 
             @Override
             protected void onStartLoading() {
@@ -172,60 +157,50 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     return;
 
                 //Set loading indicator to visible.
-                
+
                 forceLoad();
             }
 
             @Override
-            public String loadInBackground() {
+            public ArrayList<MovieModel> loadInBackground() {
+                String movieStringURL = args.getString(URL_EXTRA_KEY);
+
+                if (movieStringURL == null)
+                    return null;
+
+                try {
+                    URL movieURL = new URL(movieStringURL);
+                    String urlResponse = NetworkUtils.getHttpResponse(movieURL);
+                    ArrayList<MovieModel> movieModels = new ArrayList<MovieModel>();
+                    movieModels = JSONParser.getJSONData(urlResponse);
+                    return movieModels;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return null;
             }
         };
     }
 
     @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
+    public void onLoadFinished(Loader<ArrayList<MovieModel>> loader, ArrayList<MovieModel> data) {
+        //Set loading indicator to invisible.
 
+        if (data.size() <= 0) {
+            //Show error Message
+        }
+
+        else{
+            mMovieAdapter.loadData(data);
+
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<String> loader) {
+    public void onLoaderReset(Loader<ArrayList<MovieModel>> loader) {
 
-    }
-
-    public static class MovieJSONQuery extends AsyncTask<URL, Void, ArrayList<MovieModel>>{
-
-        @Override
-        protected ArrayList<MovieModel> doInBackground(URL... urls) {
-            URL movieURL = urls[0];
-            String urlResponse = null;
-            ArrayList<MovieModel> movieData = new ArrayList<MovieModel>();
-
-            try{
-                urlResponse = NetworkUtils.getHttpResponse(movieURL);
-                movieData = JSONParser.getJSONData(urlResponse);
-            }
-
-            catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return movieData;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<MovieModel> s) {
-            if (s.size() != 0){
-                //Show Views
-                mMovieAdapter.loadData(s);
-            }
-
-            else{
-                // Show error messages or hide Views.
-            }
-        }
     }
 
     @Override
@@ -246,4 +221,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         outState.putString(URL_EXTRA_KEY, currURL);
         outState.putInt(MENU_DISABLE_KEY, DISABLE_MENU_ITEM);
     }
+
 }
