@@ -1,6 +1,8 @@
 package com.example.raeven.popularmovies;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.raeven.popularmovies.Data.FavoritesQuery;
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.squareup.picasso.Picasso;
 
@@ -20,6 +23,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private ArrayList<MovieModel> mMovieDataList = new ArrayList<MovieModel>();
     private Context mContext;
     private MovieOnClickListener mMovieOnCLickListener;
+    private SQLiteDatabase mDb;
 
     public MovieAdapter(MovieOnClickListener movieOnClickListener){
         mMovieOnCLickListener = movieOnClickListener;
@@ -32,12 +36,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView iv_moviePoster;
         public TextView tv_movieTitle;
+        public ImageView iv_favorite;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             iv_moviePoster = (ImageView)itemView.findViewById(R.id.iv_moviePoster);
             tv_movieTitle = (TextView)itemView.findViewById(R.id.tv_mainTitle);
+            iv_favorite = (ImageView) itemView.findViewById(R.id.iv_favorite);
             itemView.setOnClickListener(this);
         }
 
@@ -68,7 +74,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         String movieImageLink = mMovieDataList.get(position).getMainPosterLink();
         String movieTitle = mMovieDataList.get(position).getTitle();
-        Log.d("My Title", movieTitle);
+        int movieID = mMovieDataList.get(position).getId();
+
+
+        if (FavoritesQuery.findMovie(mDb, movieID)){
+            holder.iv_favorite.setVisibility(View.VISIBLE);
+        }
+
+        else{
+            holder.iv_favorite.setVisibility(View.GONE);
+        }
+
+
+
         Picasso.with(mContext).load(movieImageLink).into(holder.iv_moviePoster);
         holder.tv_movieTitle.setText(movieTitle);
     }
@@ -84,8 +102,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 
-    public void loadData(ArrayList<MovieModel> movieDataList){
+    public void loadData(ArrayList<MovieModel> movieDataList, SQLiteDatabase db){
         mMovieDataList = movieDataList;
+        mDb = db;
         notifyDataSetChanged();
     }
 

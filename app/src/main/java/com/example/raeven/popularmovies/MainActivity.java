@@ -1,8 +1,12 @@
 package com.example.raeven.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -14,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.example.raeven.popularmovies.Data.FavoritesContract;
+import com.example.raeven.popularmovies.Data.FavoritesDBHelper;
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.example.raeven.popularmovies.Utilities.JSONParser;
 import com.example.raeven.popularmovies.Utilities.NetworkUtils;
@@ -21,10 +27,15 @@ import com.example.raeven.popularmovies.Utilities.NetworkUtils;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
+/*
+
+Credits:
+    Icons : https://www.flaticon.com/authors/smashicons
+ */
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieOnClickListener,
         LoaderManager.LoaderCallbacks<ArrayList<MovieModel>>{
@@ -47,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final int MOVIE_SEARCH_LOADER = 1;
     private Bundle urlBundle = new Bundle();
+    private SQLiteDatabase mDb;
 
 
     @Override
@@ -59,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
+
+        FavoritesDBHelper favHelper = FavoritesDBHelper.getInstance(this);
+        mDb = favHelper.getWritableDatabase();
+        /*
+        insertFakeData(mDb);
+        Cursor cursor = getAllGuests();
+        System.out.println("NUM OF COLUMNS: " + cursor.getCount());
+        */
 
         if (savedInstanceState != null){
             String title = savedInstanceState.getString(TITLE_EXTRA_KEY);
@@ -114,6 +134,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 getSupportLoaderManager().restartLoader(MOVIE_SEARCH_LOADER, urlBundle, this);
                 setTitle(TOP_RATED_MOVIE_TITLE);
                 item.setEnabled(false);
+                return true;
+
+            case R.id.item_favorites:
+                //Add favorite codes here
                 return true;
 
         }
@@ -193,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         else{
-            mMovieAdapter.loadData(data);
+            mMovieAdapter.loadData(data, mDb);
 
         }
     }
@@ -222,4 +246,52 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         outState.putInt(MENU_DISABLE_KEY, DISABLE_MENU_ITEM);
     }
 
+/*
+    public static void insertFakeData(SQLiteDatabase db){
+        if(db == null){
+            return;
+        }
+        //create a list of fake guests
+        List<ContentValues> list = new ArrayList<ContentValues>();
+
+        ContentValues cv = new ContentValues();
+        cv.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_ID, "91111111");
+        cv.put(FavoritesContract.FavoriteEntry.COLUMN_ORIGINAL_TITLE, "The Grudge");
+        list.add(cv);
+
+        //insert all guests in one transaction
+        try
+        {
+            db.beginTransaction();
+            //clear the table first
+            db.delete (FavoritesContract.FavoriteEntry.TABLE_NAME,null,null);
+            //go through the list and add one by one
+            for(ContentValues c:list){
+                db.insert(FavoritesContract.FavoriteEntry.TABLE_NAME, null, c);
+            }
+            db.setTransactionSuccessful();
+        }
+        catch (SQLException e) {
+            //too bad :(
+        }
+        finally
+        {
+            db.endTransaction();
+        }
+
+    }
+
+    private Cursor getAllGuests() {
+        // COMPLETED (6) Inside, call query on mDb passing in the table name and projection String [] order by COLUMN_TIMESTAMP
+        return mDb.query(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+    */
 }
