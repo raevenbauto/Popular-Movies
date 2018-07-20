@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mMovieAdapter = new MovieAdapter(this);
-        mRecyclerView.setAdapter(mMovieAdapter);
+
         FavoritesDBHelper favHelper = FavoritesDBHelper.getInstance(this);
         mDb = favHelper.getWritableDatabase();
         System.out.println("OnCreate");
@@ -124,8 +123,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (loader.getId() == POPULAR_MOVIE_LOADER || loader.getId() == TOP_RATED_MOVIE_LOADER || loader.getId() == MOVIE_FAVORITE_LOADER) {
             System.out.println(loader.getId());
             System.out.println("onLoadFinished()");
+            mMovieAdapter = new MovieAdapter(this, (ArrayList<MovieModel>) data);
+            mRecyclerView.setAdapter(mMovieAdapter);
             mMovieAdapter.loadData((ArrayList<MovieModel>) data, mDb);
-            getSupportLoaderManager().destroyLoader(loader.getId());
         }
     }
 
@@ -193,9 +193,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 item.setEnabled(false);
                 break;
         }
-        getLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER);
+        getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER);
         getSupportLoaderManager().initLoader(CURR_LOADER, null, this);
-
         return true;
     }
 
@@ -229,8 +228,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         intentToStartDetailActivity.putExtra("myMovieDetails", movieDetailsObject);
         startActivity(intentToStartDetailActivity);
     }
-
-
-
 
 }

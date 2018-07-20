@@ -25,7 +25,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private MovieOnClickListener mMovieOnCLickListener;
     private SQLiteDatabase mDb;
 
-    public MovieAdapter(MovieOnClickListener movieOnClickListener){
+    public MovieAdapter(MovieOnClickListener movieOnClickListener, ArrayList<MovieModel> data){
+        mMovieDataList = data;
         mMovieOnCLickListener = movieOnClickListener;
     }
 

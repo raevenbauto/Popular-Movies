@@ -16,19 +16,8 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesContract.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesContract.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesDBHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesDBHelper.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesQuery.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesQuery.java" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MainActivity.java" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieDetailActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieDetailActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Utilities/NetworkUtils.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Utilities/NetworkUtils.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_favorite.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-mdpi/ic_favorite.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_favorite.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_favorite.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/movie_layout_list.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/movie_layout_list.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -61,15 +50,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="511">
-              <caret line="127" column="66" lean-forward="false" selection-start-line="127" selection-start-column="66" selection-end-line="127" selection-end-column="66" />
+            <state relative-caret-position="313">
+              <caret line="125" column="73" lean-forward="false" selection-start-line="125" selection-start-column="73" selection-end-line="125" selection-end-column="73" />
               <folding>
-                <element signature="e#4758#4759#0" expanded="true" />
-                <element signature="e#4804#4805#0" expanded="true" />
+                <element signature="e#4728#4729#0" expanded="true" />
+                <element signature="e#4774#4775#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MovieAdapter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="161">
+              <caret line="28" column="30" lean-forward="false" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -89,16 +88,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
               <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MovieAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="74" column="59" lean-forward="false" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -131,6 +120,8 @@
       <find>Loader</find>
       <find>initLoader</find>
       <find>urlBundle</find>
+      <find>CURR_LOADER</find>
+      <find>onCreate</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -2161,9 +2152,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesContract.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Data/FavoritesDBHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieDetailActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Loader/FavoritesLoader.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java" />
       </list>
     </option>
   </component>
@@ -2494,6 +2485,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="803" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2502,7 +2494,7 @@
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27722773" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27542374" sideWeight="0.49713877" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27542374" sideWeight="0.49713877" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956153" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2791,14 +2783,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="74" column="59" lean-forward="false" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/Loader/MoviesLoader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -2825,12 +2809,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="511">
-          <caret line="127" column="66" lean-forward="false" selection-start-line="127" selection-start-column="66" selection-end-line="127" selection-end-column="66" />
+        <state relative-caret-position="313">
+          <caret line="125" column="73" lean-forward="false" selection-start-line="125" selection-start-column="73" selection-end-line="125" selection-end-column="73" />
           <folding>
-            <element signature="e#4758#4759#0" expanded="true" />
-            <element signature="e#4804#4805#0" expanded="true" />
+            <element signature="e#4728#4729#0" expanded="true" />
+            <element signature="e#4774#4775#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/raeven/popularmovies/MovieAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="28" column="30" lean-forward="false" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
