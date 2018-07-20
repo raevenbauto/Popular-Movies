@@ -75,4 +75,24 @@ public class NetworkUtils {
         }
     }
 
+    public static URL createMovieURL(int movieID){
+        URL url = null;
+
+        Uri uri = Uri.parse(STATIC_URL).buildUpon()
+                .appendPath(STATIC_NUM)
+                .appendEncodedPath(STATIC_MOVIE)
+                .appendEncodedPath(String.valueOf(movieID))
+                .appendQueryParameter(PARAM_API_KEY_QUERY, PARAM_API_KEY)
+                .build();
+
+        try{
+            url = new URL(uri.toString());
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
 }

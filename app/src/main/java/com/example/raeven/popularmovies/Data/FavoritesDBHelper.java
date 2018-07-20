@@ -8,7 +8,7 @@ public class FavoritesDBHelper extends SQLiteOpenHelper {
 
     private static FavoritesDBHelper mInstance = null;
     private static final String DATABASE_NAME = "favorites.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static FavoritesDBHelper getInstance(Context ctx){
         if (mInstance == null){
@@ -27,7 +27,12 @@ public class FavoritesDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_FAVORITES_TABLE = "CREATE TABLE " + FavoritesContract.FavoriteEntry.TABLE_NAME + " (" +
                 FavoritesContract.FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 FavoritesContract.FavoriteEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
-                FavoritesContract.FavoriteEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL " +
+                FavoritesContract.FavoriteEntry.COLUMN_ORIGINAL_TITLE + " TEXT NOT NULL, " +
+                FavoritesContract.FavoriteEntry.COLUMN_MAIN_POSTER_LINK + " TEXT NOT NULL, " +
+                FavoritesContract.FavoriteEntry.COLUMN_BACK_POSTER_LINK + " TEXT NOT NULL, " +
+                FavoritesContract.FavoriteEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                FavoritesContract.FavoriteEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                FavoritesContract.FavoriteEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL " +
                 "); ";
         db.execSQL(SQL_CREATE_FAVORITES_TABLE);
         System.out.println("Database Created");

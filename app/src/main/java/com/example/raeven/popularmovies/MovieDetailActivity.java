@@ -59,7 +59,6 @@ public class MovieDetailActivity extends AppCompatActivity  {
             public void onClick(View v) {
                 addToFavorites(mDb);
                 hideFavoriteButton();
-
             }
         });
 
@@ -109,6 +108,11 @@ public class MovieDetailActivity extends AppCompatActivity  {
         ContentValues values = new ContentValues();
         values.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_ID, myMovieData.getId());
         values.put(FavoritesContract.FavoriteEntry.COLUMN_ORIGINAL_TITLE, myMovieData.getOriginalTitle());
+        values.put(FavoritesContract.FavoriteEntry.COLUMN_MAIN_POSTER_LINK, myMovieData.getMainPosterLink());
+        values.put(FavoritesContract.FavoriteEntry.COLUMN_BACK_POSTER_LINK, myMovieData.getBackPosterLink());
+        values.put(FavoritesContract.FavoriteEntry.COLUMN_OVERVIEW, myMovieData.getOverview());
+        values.put(FavoritesContract.FavoriteEntry.COLUMN_RELEASE_DATE, myMovieData.getReleaseDate());
+        values.put(FavoritesContract.FavoriteEntry.COLUMN_VOTE_AVERAGE, myMovieData.getVoteAverage());
 
         FavoritesQuery.insertMovie(mDb, values);
     }

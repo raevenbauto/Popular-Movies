@@ -36,14 +36,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public ImageView iv_moviePoster;
         public TextView tv_movieTitle;
-        public ImageView iv_favorite;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             iv_moviePoster = (ImageView)itemView.findViewById(R.id.iv_moviePoster);
             tv_movieTitle = (TextView)itemView.findViewById(R.id.tv_mainTitle);
-            iv_favorite = (ImageView) itemView.findViewById(R.id.iv_favorite);
             itemView.setOnClickListener(this);
         }
 
@@ -76,17 +74,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         String movieTitle = mMovieDataList.get(position).getTitle();
         int movieID = mMovieDataList.get(position).getId();
 
-
-        if (FavoritesQuery.findMovie(mDb, movieID)){
-            holder.iv_favorite.setVisibility(View.VISIBLE);
-        }
-
-        else{
-            holder.iv_favorite.setVisibility(View.GONE);
-        }
-
-
-
         Picasso.with(mContext).load(movieImageLink).into(holder.iv_moviePoster);
         holder.tv_movieTitle.setText(movieTitle);
     }
@@ -104,7 +91,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public void loadData(ArrayList<MovieModel> movieDataList, SQLiteDatabase db){
         mMovieDataList = movieDataList;
-        mDb = db;
+        //mDb = db;
         notifyDataSetChanged();
     }
 

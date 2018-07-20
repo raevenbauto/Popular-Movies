@@ -50,4 +50,18 @@ public class FavoritesQuery {
             mDb.endTransaction();
         }
     }
+
+    public static final Cursor getAllFavorites(SQLiteDatabase mDb){
+
+        return mDb.query(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+    }
 }
