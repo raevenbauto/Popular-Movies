@@ -12,10 +12,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /*
-    Credits to Maxim Basinski for the Star image. 
+    Credits to Maxim Basinski for the Star image.
 
 
  */
@@ -74,7 +76,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         mTrailerRecyclerView.setLayoutManager(trailerLayoutManager);
         mTrailerRecyclerView.setHasFixedSize(false);
 
-        LinearLayoutManager reviewsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager reviewsLayoutManager = new GridLayoutManager(this, 1);
         mReviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
         mReviewsRecyclerView.setHasFixedSize(false);
 
