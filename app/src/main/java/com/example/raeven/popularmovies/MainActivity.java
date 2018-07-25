@@ -12,7 +12,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.raeven.popularmovies.Adapters.MovieAdapter;
 import com.example.raeven.popularmovies.Data.FavoritesDBHelper;
@@ -22,6 +25,7 @@ import com.example.raeven.popularmovies.Model.MovieModel;
 import com.example.raeven.popularmovies.Utilities.NetworkUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
 
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ImageView mMoviePoster;
     private RecyclerView mRecyclerView;
     private static MovieAdapter mMovieAdapter;
+    private ProgressBar pb_movieLoading;
 
     private final String POPULAR_MOVIE_TITLE = "Popular Movies";
     private final String TOP_RATED_MOVIE_TITLE = "Top Rated Movies";
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void declareViews(){
         mMoviePoster = (ImageView)findViewById(R.id.iv_moviePoster);
         mRecyclerView = (RecyclerView)findViewById(R.id.rv_movieList);
+        pb_movieLoading =  (ProgressBar)findViewById(R.id.pb_movieLoading);
     }
 
     @Override
@@ -101,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
+        pb_movieLoading.setVisibility(View.VISIBLE);
         System.out.println("Loader ID: " +  id);
         if (id == POPULAR_MOVIE_LOADER || id == TOP_RATED_MOVIE_LOADER) {
             String url = "";
@@ -121,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoadFinished(Loader loader, Object data) {
+
         if (loader.getId() == POPULAR_MOVIE_LOADER || loader.getId() == TOP_RATED_MOVIE_LOADER || loader.getId() == MOVIE_FAVORITE_LOADER) {
             System.out.println(loader.getId());
             System.out.println("onLoadFinished()");
@@ -128,6 +136,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mRecyclerView.setAdapter(mMovieAdapter);
             mMovieAdapter.loadData(mDb);
         }
+
+        if (loader.getId() == MOVIE_FAVORITE_LOADER){
+            if (data.toString() == "[]")
+                Toast.makeText(this, "No favorites added.",
+                        Toast.LENGTH_LONG).show();
+        }
+        pb_movieLoading.setVisibility(View.GONE);
     }
 
 

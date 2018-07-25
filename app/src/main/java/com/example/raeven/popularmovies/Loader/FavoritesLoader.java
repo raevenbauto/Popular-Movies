@@ -5,9 +5,11 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.example.raeven.popularmovies.Data.FavoritesContract;
 import com.example.raeven.popularmovies.Data.FavoritesQuery;
+import com.example.raeven.popularmovies.MainActivity;
 import com.example.raeven.popularmovies.Model.MovieModel;
 
 import java.util.ArrayList;
@@ -18,9 +20,11 @@ public class FavoritesLoader extends AsyncTaskLoader<List<MovieModel>> {
     private List<MovieModel> favoriteMovies;
     private int favoriteMoviesCount;
     private SQLiteDatabase mDb;
+    private Context context;
 
     public FavoritesLoader(Context context, SQLiteDatabase mDb) {
         super(context);
+        this.context = context;
         this.mDb = mDb;
     }
 
@@ -54,6 +58,8 @@ public class FavoritesLoader extends AsyncTaskLoader<List<MovieModel>> {
             MovieModel favoriteMovie = new MovieModel(id, voteAverage, title, mainPosterLink, originalTitle, backPosterLink, overview, releaseDate);
             holdFavoriteMovies.add(favoriteMovie);
         }
+
+
 
         return holdFavoriteMovies;
     }
