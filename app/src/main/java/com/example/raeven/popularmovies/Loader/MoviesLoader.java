@@ -38,14 +38,14 @@ public class MoviesLoader extends AsyncTaskLoader<List<MovieModel>> {
 
     @Override
     public List<MovieModel> loadInBackground() {
-        String movieStringURL = urlPath;
+        String trailerStringURL = urlPath;
 
-        if (movieStringURL == null)
+        if (trailerStringURL == null)
             return null;
 
         try {
-            URL movieURL = new URL(movieStringURL);
-            String urlResponse = NetworkUtils.getHttpResponse(movieURL);
+            URL trailerURL = new URL(trailerStringURL);
+            String urlResponse = NetworkUtils.getHttpResponse(trailerURL);
             movieModels = JSONParser.getJSONData(urlResponse);
         } catch (IOException e) {
             e.printStackTrace();

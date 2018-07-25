@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.example.raeven.popularmovies.Adapters.MovieAdapter;
 import com.example.raeven.popularmovies.Data.FavoritesDBHelper;
 import com.example.raeven.popularmovies.Loader.FavoritesLoader;
 import com.example.raeven.popularmovies.Loader.MoviesLoader;
@@ -104,10 +105,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (id == POPULAR_MOVIE_LOADER || id == TOP_RATED_MOVIE_LOADER) {
             String url = "";
             if (id == POPULAR_MOVIE_LOADER)
-                url = NetworkUtils.createURL(1).toString();
+                url = NetworkUtils.createURL(POPULAR_MOVIE_LOADER).toString();
 
             else
-                url = NetworkUtils.createURL(2).toString();
+                url = NetworkUtils.createURL(TOP_RATED_MOVIE_LOADER).toString();
 
             return new MoviesLoader(this, url);
         }
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             System.out.println("onLoadFinished()");
             mMovieAdapter = new MovieAdapter(this, (ArrayList<MovieModel>) data);
             mRecyclerView.setAdapter(mMovieAdapter);
-            mMovieAdapter.loadData((ArrayList<MovieModel>) data, mDb);
+            mMovieAdapter.loadData(mDb);
         }
     }
 

@@ -3,12 +3,15 @@ package com.example.raeven.popularmovies.Utilities;
 import android.util.Log;
 
 import com.example.raeven.popularmovies.Model.MovieModel;
+import com.example.raeven.popularmovies.Model.ReviewModel;
+import com.example.raeven.popularmovies.Model.TrailerModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class JSONParser {
 
@@ -41,6 +44,46 @@ public class JSONParser {
         }
 
         return movieDataList;
+    }
+
+    public static List<TrailerModel> getTrailerJSON(String urlResponse) throws JSONException {
+        List<TrailerModel> trailerDataList = new ArrayList<TrailerModel>();
+
+        JSONObject JSONObject = new JSONObject(urlResponse);
+        JSONArray movieResultsJSONArray = JSONObject.getJSONArray("results");
+
+        for (int i = 0; i < movieResultsJSONArray.length(); i++){
+            JSONObject movieJSONObject = movieResultsJSONArray.getJSONObject(i);
+
+            String key = movieJSONObject.getString("key");
+            String name = movieJSONObject.getString("name");
+
+            TrailerModel trailerData = new TrailerModel(key, name);
+
+            trailerDataList.add(trailerData);
+        }
+
+        return trailerDataList;
+    }
+
+    public static List<ReviewModel> getReviewJSON(String urlResponse) throws JSONException {
+        List<ReviewModel> reviewDataList = new ArrayList<ReviewModel>();
+
+        JSONObject JSONObject = new JSONObject(urlResponse);
+        JSONArray movieResultsJSONArray = JSONObject.getJSONArray("results");
+
+        for (int i = 0; i < movieResultsJSONArray.length(); i++){
+            JSONObject movieJSONObject = movieResultsJSONArray.getJSONObject(i);
+
+            String author = movieJSONObject.getString("author");
+            String content = movieJSONObject.getString("content");
+
+            ReviewModel trailerData = new ReviewModel(author, content);
+
+            reviewDataList.add(trailerData);
+        }
+
+        return reviewDataList;
     }
 
     private static String dateConvert(String releaseDate){
