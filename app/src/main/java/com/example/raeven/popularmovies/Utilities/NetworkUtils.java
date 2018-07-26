@@ -1,6 +1,9 @@
 package com.example.raeven.popularmovies.Utilities;
 
 import android.net.Uri;
+
+import com.example.raeven.popularmovies.BuildConfig;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +25,8 @@ public class NetworkUtils {
     private static final String STATIC_POPULAR = "popular";
     private static final String STATIC_TOP_RATED = "top_rated";
     private static final String PARAM_API_KEY_QUERY = "api_key";
-    private static final String PARAM_API_KEY = "3c308b4b3b69940fdeecb1a8561ef61b";
+    private static final String PARAM_API_KEY = BuildConfig.THE_GUARDIAN_API_KEY;
 
-    //http://api.themoviedb.org/3/movie/102899/videos?api_key=3c308b4b3b69940fdeecb1a8561ef61b
     private static final String STATIC_VIDEOS = "videos";
     private static final String STATIC_REVIEWS = "reviews";
 

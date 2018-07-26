@@ -21,7 +21,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private ArrayList<MovieModel> mMovieDataList = new ArrayList<MovieModel>();
     private Context mContext;
     private MovieOnClickListener mMovieOnCLickListener;
-    private SQLiteDatabase mDb;
 
     public MovieAdapter(MovieOnClickListener movieOnClickListener, ArrayList<MovieModel> data){
         mMovieDataList = data;
@@ -71,7 +70,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         String movieImageLink = mMovieDataList.get(position).getMainPosterLink();
         String movieTitle = mMovieDataList.get(position).getTitle();
-        int movieID = mMovieDataList.get(position).getId();
 
         Picasso.with(mContext).load(movieImageLink).into(holder.iv_moviePoster);
         holder.tv_movieTitle.setText(movieTitle);
@@ -79,16 +77,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        if (mMovieDataList.size() == 0){
-            return 0;
+        if (mMovieDataList != null){
+            if (mMovieDataList.size() == 0){
+                return 0;
+            }
+
+            else {
+                return mMovieDataList.size();
+            }
         }
 
-        else {
-            return mMovieDataList.size();
-        }
+        else
+            return 0;
+
     }
 
-    public void loadData(SQLiteDatabase db){
+    public void loadData(){
         notifyDataSetChanged();
     }
 

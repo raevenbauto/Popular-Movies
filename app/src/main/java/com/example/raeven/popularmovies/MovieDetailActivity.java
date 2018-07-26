@@ -1,10 +1,8 @@
 package com.example.raeven.popularmovies;
 
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,15 +15,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.raeven.popularmovies.Adapters.ReviewsAdapter;
 import com.example.raeven.popularmovies.Adapters.TrailerAdapter;
-import com.example.raeven.popularmovies.Data.FavoritesContract;
-import com.example.raeven.popularmovies.Data.FavoritesDBHelper;
-import com.example.raeven.popularmovies.Data.FavoritesQuery;
+import com.example.raeven.popularmovies.Data.AppDatabase;
+import com.example.raeven.popularmovies.Data.AppExecutors;
 import com.example.raeven.popularmovies.Loader.ReviewsLoader;
 import com.example.raeven.popularmovies.Loader.TrailerLoader;
 import com.example.raeven.popularmovies.Model.MovieModel;
@@ -36,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /*
     Credits to Maxim Basinski for the Star image.
@@ -53,7 +50,7 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
     private TextView tv_voteAverage;
     private Button bt_favorite;
     private Button bt_unfavorite;
-    private SQLiteDatabase mDb;
+    private AppDatabase mDb;
 
     private RecyclerView mTrailerRecyclerView;
     private RecyclerView mReviewsRecyclerView;
@@ -88,24 +85,28 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         getSupportLoaderManager().initLoader(MOVIE_TRAILER_LOADER, null,  this);
         getSupportLoaderManager().initLoader(MOVIE_REVIEW_LOADER, null,  this);
 
-        FavoritesDBHelper favHelper = FavoritesDBHelper.getInstance(this);
-        mDb = favHelper.getWritableDatabase();
+        mDb = AppDatabase.getInstance(getApplicationContext());
+        final int movieID = myMovieData.getMovieID();
+        AppExecutors.getInstance().diskIO().execute(new Runnable(){
 
-        final int movieID = myMovieData.getId();
-        if (FavoritesQuery.findMovie(mDb, movieID)){
-            hideFavoriteButton();
-        }
+            @Override
+            public void run() {
+                if (mDb.movieDao().checkMovie(movieID)){
+                    hideFavoriteButton();
+                }
+            }
+        });
 
         bt_favorite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                addToFavorites(mDb);
+                addToFavorites();
                 hideFavoriteButton();
             }
         });
 
         bt_unfavorite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                removeFromFavorites(mDb, movieID);
+                removeFromFavorites(movieID);
                 hideUnfavoriteButton();
             }
         });
@@ -144,24 +145,41 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         bt_favorite.setVisibility(View.VISIBLE);
     }
 
-    private void addToFavorites(SQLiteDatabase mDb) {
+    private void addToFavorites() {
 
         // Create a new map of values, where column names are the keys
 
-        ContentValues values = new ContentValues();
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_ID, myMovieData.getId());
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_ORIGINAL_TITLE, myMovieData.getOriginalTitle());
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_MAIN_POSTER_LINK, myMovieData.getMainPosterLink());
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_BACK_POSTER_LINK, myMovieData.getBackPosterLink());
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_OVERVIEW, myMovieData.getOverview());
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_RELEASE_DATE, myMovieData.getReleaseDate());
-        values.put(FavoritesContract.FavoriteEntry.COLUMN_VOTE_AVERAGE, myMovieData.getVoteAverage());
+        int movieID = myMovieData.getMovieID();
+        String voteAverage = myMovieData.getVoteAverage();
+        String title = myMovieData.getTitle();
+        String mainPosterLink = myMovieData.getMainPosterLink();
+        String originalTitle = myMovieData.getOriginalTitle();
+        String backPosterLink = myMovieData.getBackPosterLink();
+        String overview = myMovieData.getOverview();
+        String releaseDate = myMovieData.getReleaseDate();
 
-        FavoritesQuery.insertMovie(mDb, values);
+        final MovieModel movieModel = new MovieModel(movieID, voteAverage, title, mainPosterLink, originalTitle, backPosterLink, overview, releaseDate);
+        AppExecutors.getInstance().diskIO().execute(new Runnable(){
+
+            @Override
+            public void run() {
+                mDb.movieDao().insertMovie(movieModel);
+            }
+        });
+
+        //finish();
+
     }
 
-    private void removeFromFavorites(SQLiteDatabase mDb, int movieID){
-        FavoritesQuery.removeMovie(mDb, movieID);
+    private void removeFromFavorites(final int movieID){
+        AppExecutors.getInstance().diskIO().execute(new Runnable(){
+
+            @Override
+            public void run() {
+                mDb.movieDao().deleteMovie(movieID);
+            }
+        });
+
     }
 
     @Override
@@ -185,8 +203,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
     @NonNull
     @Override
     public Loader onCreateLoader(int id, @Nullable Bundle args) {
-        URL trailerURL = NetworkUtils.createTrailerURL(Integer.toString(myMovieData.getId()));
-        URL reviewsURL = NetworkUtils.createReviewsURL(Integer.toString(myMovieData.getId()));
+        URL trailerURL = NetworkUtils.createTrailerURL(Integer.toString(myMovieData.getMovieID()));
+        URL reviewsURL = NetworkUtils.createReviewsURL(Integer.toString(myMovieData.getMovieID()));
         if (id == MOVIE_TRAILER_LOADER)
             return new TrailerLoader(this, trailerURL.toString());
 

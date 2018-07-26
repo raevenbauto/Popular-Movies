@@ -1,10 +1,17 @@
 package com.example.raeven.popularmovies.Model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "movie")
 public class MovieModel implements Serializable{
 
+    @PrimaryKey (autoGenerate = true)
     private int id;
+    private int movieID;
     private String voteAverage;
     private String title;
     private String mainPosterLink;
@@ -13,9 +20,10 @@ public class MovieModel implements Serializable{
     private String overview;
     private String releaseDate;
 
-    public MovieModel(int id, String voteAverage, String title, String mainPosterLink, String originalTitle,
+    @Ignore
+    public MovieModel(int movieID, String voteAverage, String title, String mainPosterLink, String originalTitle,
                         String backPosterLink, String overview, String releaseDate){
-        this.id = id;
+        this.movieID = movieID;
         this.title = title;
         this.mainPosterLink = mainPosterLink;
         this.originalTitle = originalTitle;
@@ -25,12 +33,25 @@ public class MovieModel implements Serializable{
         this.voteAverage = voteAverage;
     }
 
-    public int getId() {
-        return id;
+    public MovieModel(int id, int movieID, String voteAverage, String title, String mainPosterLink, String originalTitle,
+                      String backPosterLink, String overview, String releaseDate){
+        this.id = id;
+        this.movieID = movieID;
+        this.title = title;
+        this.mainPosterLink = mainPosterLink;
+        this.originalTitle = originalTitle;
+        this.backPosterLink = backPosterLink;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getMovieID() {
+        return movieID;
+    }
+
+    public void setMovieID(int movieID) {
+        this.movieID = movieID;
     }
 
     public String getVoteAverage() {
@@ -87,5 +108,13 @@ public class MovieModel implements Serializable{
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

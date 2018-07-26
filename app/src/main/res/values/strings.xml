@@ -14,7 +14,7 @@
     <string name="trailers">Trailers</string>
     <string name="reviews">Reviews</string>
     <string name="reviewer_name">Reviewer Name</string>
-
+    <string name="no_internet">Try Again</string>
 
 
 </resources>

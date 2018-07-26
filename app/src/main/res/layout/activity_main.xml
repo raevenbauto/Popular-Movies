@@ -2,10 +2,11 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="#282828">
+    android:background="#282828"
+    tools:context=".MainActivity">
 
     <ProgressBar
         android:id="@+id/pb_movieLoading"
@@ -25,9 +26,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_movieList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rv_movieList">
+        android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
 

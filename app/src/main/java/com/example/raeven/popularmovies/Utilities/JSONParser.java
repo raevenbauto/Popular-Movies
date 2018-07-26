@@ -25,17 +25,43 @@ public class JSONParser {
         JSONObject JSONObject = new JSONObject(urlResponse);
         JSONArray movieResultsJSONArray = JSONObject.getJSONArray("results");
 
+        int id = 0;
+        String voteAverage, title, mainPosterLink, originalTitle, backPosterLink, overview, releaseDate;
+        voteAverage = title = mainPosterLink = originalTitle = backPosterLink = overview = releaseDate = "";
         for (int i = 0; i < movieResultsJSONArray.length(); i++){
             JSONObject movieJSONObject = movieResultsJSONArray.getJSONObject(i);
 
-            int id = Integer.parseInt(movieJSONObject.getString("id"));
-            String voteAverage = movieJSONObject.getString("vote_average") + "/10";
-            String title = movieJSONObject.getString("title");
-            String mainPosterLink = (STATIC_IMAGE_LINK + movieJSONObject.getString("poster_path"));
-            String originalTitle = movieJSONObject.getString("original_title");
-            String backPosterLink = (STATIC_BACK_IMAGE_LINK + movieJSONObject.getString("backdrop_path"));
-            String overview = movieJSONObject.getString("overview");
-            String releaseDate = dateConvert(movieJSONObject.getString("release_date"));
+            if (movieJSONObject.has("id")){
+                id = Integer.parseInt(movieJSONObject.getString("id"));
+            }
+
+            if (movieJSONObject.has("vote_average")){
+                voteAverage = movieJSONObject.getString("vote_average") + "/10";
+            }
+
+            if (movieJSONObject.has("title")){
+                title = movieJSONObject.getString("title");
+            }
+
+            if (movieJSONObject.has("poster_path")){
+                mainPosterLink = (STATIC_IMAGE_LINK + movieJSONObject.getString("poster_path"));
+            }
+
+            if (movieJSONObject.has("original_title")){
+                originalTitle = movieJSONObject.getString("original_title");
+            }
+
+            if (movieJSONObject.has("backdrop_path")){
+                backPosterLink = (STATIC_BACK_IMAGE_LINK + movieJSONObject.getString("backdrop_path"));
+            }
+
+            if (movieJSONObject.has("overview")){
+                overview = movieJSONObject.getString("overview");
+            }
+
+            if (movieJSONObject.has("release_date")){
+                releaseDate = dateConvert(movieJSONObject.getString("release_date"));
+            }
 
             MovieModel movieObject = new MovieModel(id, voteAverage, title, mainPosterLink, originalTitle, backPosterLink,
                                                        overview, releaseDate);
@@ -50,16 +76,22 @@ public class JSONParser {
         List<TrailerModel> trailerDataList = new ArrayList<TrailerModel>();
 
         JSONObject JSONObject = new JSONObject(urlResponse);
-        JSONArray movieResultsJSONArray = JSONObject.getJSONArray("results");
+        JSONArray trailerResultsJSONArray = JSONObject.getJSONArray("results");
+        String key, name;
+        key = name = "";
 
-        for (int i = 0; i < movieResultsJSONArray.length(); i++){
-            JSONObject movieJSONObject = movieResultsJSONArray.getJSONObject(i);
+        for (int i = 0; i < trailerResultsJSONArray.length(); i++){
+            JSONObject trailerMovieObject = trailerResultsJSONArray.getJSONObject(i);
 
-            String key = movieJSONObject.getString("key");
-            String name = movieJSONObject.getString("name");
+            if (trailerMovieObject.has("key")){
+                key = trailerMovieObject.getString("key");
+            }
+
+            if (trailerMovieObject.has("name")){
+                name = trailerMovieObject.getString("name");
+            }
 
             TrailerModel trailerData = new TrailerModel(key, name);
-
             trailerDataList.add(trailerData);
         }
 
@@ -70,17 +102,23 @@ public class JSONParser {
         List<ReviewModel> reviewDataList = new ArrayList<ReviewModel>();
 
         JSONObject JSONObject = new JSONObject(urlResponse);
-        JSONArray movieResultsJSONArray = JSONObject.getJSONArray("results");
+        JSONArray reviewResultsJSONArray = JSONObject.getJSONArray("results");
+        String author, content;
+        author = content = "";
 
-        for (int i = 0; i < movieResultsJSONArray.length(); i++){
-            JSONObject movieJSONObject = movieResultsJSONArray.getJSONObject(i);
+        for (int i = 0; i < reviewResultsJSONArray.length(); i++){
+            JSONObject reviewJSONObject = reviewResultsJSONArray.getJSONObject(i);
 
-            String author = movieJSONObject.getString("author");
-            String content = movieJSONObject.getString("content");
+            if (reviewJSONObject.has("author")){
+                author = reviewJSONObject.getString("author");
+            }
 
-            ReviewModel trailerData = new ReviewModel(author, content);
+            if (reviewJSONObject.has("content")){
+                content = reviewJSONObject.getString("content");
+            }
 
-            reviewDataList.add(trailerData);
+            ReviewModel reviewData = new ReviewModel(author, content);
+            reviewDataList.add(reviewData);
         }
 
         return reviewDataList;

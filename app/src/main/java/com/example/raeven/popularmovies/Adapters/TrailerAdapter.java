@@ -75,13 +75,20 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
 
     @Override
     public int getItemCount() {
-        if (mTrailerObject.size() == 0){
-            return 0;
+
+        if (mTrailerObject != null){
+            if (mTrailerObject.size() == 0){
+                return 0;
+            }
+
+            else {
+                return mTrailerObject.size();
+            }
         }
 
-        else {
-            return mTrailerObject.size();
-        }
+        else
+            return 0;
+
     }
 
     public void loadData(){

@@ -3,13 +3,16 @@ package com.example.raeven.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,14 +21,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.raeven.popularmovies.Adapters.MovieAdapter;
-import com.example.raeven.popularmovies.Data.FavoritesDBHelper;
+import com.example.raeven.popularmovies.Data.AppDatabase;
 import com.example.raeven.popularmovies.Loader.FavoritesLoader;
 import com.example.raeven.popularmovies.Loader.MoviesLoader;
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.example.raeven.popularmovies.Utilities.NetworkUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*
 
@@ -47,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private final String MENU_DISABLE_KEY = "no_menu_disable";
     private final String CURR_LOADER_KEY = "currLoaderKey";
-    private final String FAVORITE_MOVIES_KEY = "favorite_mov";
-
 
     private static int CURR_LOADER = 0;
     private static int DISABLE_MENU_ITEM = 0;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final int TOP_RATED_MOVIE_LOADER = 2;
     private static final int MOVIE_FAVORITE_LOADER = 3;
 
-    private SQLiteDatabase mDb;
+    private AppDatabase mDb;
 
 
     @Override
@@ -65,20 +65,55 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         declareViews();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+
+        int posterWidth = 500;
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, calculateBestSpanCount(posterWidth));
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        FavoritesDBHelper favHelper = FavoritesDBHelper.getInstance(this);
-        mDb = favHelper.getWritableDatabase();
-        System.out.println("OnCreate");
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
-        if (savedInstanceState == null){
-            CURR_LOADER = 1;
-            setTitle(POPULAR_MOVIE_TITLE);
-            getSupportLoaderManager().initLoader(POPULAR_MOVIE_LOADER, null,  this);
+        CURR_LOADER = 1;
+        setTitle(POPULAR_MOVIE_TITLE);
+        if (checkConnection())
+             getSupportLoaderManager().initLoader(POPULAR_MOVIE_LOADER, null, this);
+
+    }
+
+    private int calculateBestSpanCount(int posterWidth) {
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        float screenWidth = outMetrics.widthPixels;
+        return Math.round(screenWidth / posterWidth);
+    }
+
+    private boolean checkConnection(){
+        ConnectivityManager connectionManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        // Test for connection
+        if (connectionManager.getActiveNetworkInfo() != null
+                && connectionManager.getActiveNetworkInfo().isAvailable()
+                && connectionManager.getActiveNetworkInfo().isConnected()) {
+            return true;
         }
+        else{
+            Snackbar snackbar = Snackbar
+                    .make(findViewById(R.id.cl_mainLayout), "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Try Again", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            finish();
+                            overridePendingTransition( 0, 0);
+                            startActivity(getIntent());
+                            overridePendingTransition( 0, 0);
+                        }
+                    });
 
+            snackbar.show();
+            mRecyclerView.setAdapter(null);
+            return false;
+        }
     }
 
     private void declareViews(){
@@ -109,18 +144,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public Loader onCreateLoader(int id, Bundle args) {
         pb_movieLoading.setVisibility(View.VISIBLE);
         System.out.println("Loader ID: " +  id);
-        if (id == POPULAR_MOVIE_LOADER || id == TOP_RATED_MOVIE_LOADER) {
-            String url = "";
-            if (id == POPULAR_MOVIE_LOADER)
-                url = NetworkUtils.createURL(POPULAR_MOVIE_LOADER).toString();
+        if (checkConnection()){
+            if (id == POPULAR_MOVIE_LOADER || id == TOP_RATED_MOVIE_LOADER) {
+                String url = "";
+                if (id == POPULAR_MOVIE_LOADER)
+                    url = NetworkUtils.createURL(POPULAR_MOVIE_LOADER).toString();
 
-            else
-                url = NetworkUtils.createURL(TOP_RATED_MOVIE_LOADER).toString();
+                else
+                    url = NetworkUtils.createURL(TOP_RATED_MOVIE_LOADER).toString();
 
-            return new MoviesLoader(this, url);
-        }
-        else if (id == MOVIE_FAVORITE_LOADER) {
-            return new FavoritesLoader(this, mDb);
+                return new MoviesLoader(this, url);
+            }
+            else if (id == MOVIE_FAVORITE_LOADER) {
+                return new FavoritesLoader(this, mDb);
+            }
         }
 
         return null;
@@ -134,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             System.out.println("onLoadFinished()");
             mMovieAdapter = new MovieAdapter(this, (ArrayList<MovieModel>) data);
             mRecyclerView.setAdapter(mMovieAdapter);
-            mMovieAdapter.loadData(mDb);
+            mMovieAdapter.loadData();
         }
 
         if (loader.getId() == MOVIE_FAVORITE_LOADER){
@@ -229,6 +266,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         else if (getTitle() == FAVORITE_MOVIE_TITLE){
             menu.findItem(R.id.item_popularMovie).setEnabled(true);
             menu.findItem(R.id.item_topRated).setEnabled(true);
+        }
+
+        if (!checkConnection()){
+            menu.findItem(R.id.item_popularMovie).setEnabled(false);
+            menu.findItem(R.id.item_topRated).setEnabled(false);
+            menu.findItem(R.id.item_favorites).setEnabled(false);
         }
 
         return true;

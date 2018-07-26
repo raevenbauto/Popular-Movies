@@ -79,14 +79,19 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
 
     @Override
     public int getItemCount() {
+        if (mReviewObject != null){
+            if (mReviewObject.size() == 0){
+                return 0;
+            }
 
-        if (mReviewObject.size() == 0){
+            else {
+                return mReviewObject.size();
+            }
+        }
+
+        else
             return 0;
-        }
 
-        else {
-            return mReviewObject.size();
-        }
     }
 
     public void loadData(){ notifyDataSetChanged(); }
