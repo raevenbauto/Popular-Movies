@@ -22,9 +22,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private Context mContext;
     private MovieOnClickListener mMovieOnCLickListener;
 
-    public MovieAdapter(MovieOnClickListener movieOnClickListener, ArrayList<MovieModel> data){
-        mMovieDataList = data;
-        mMovieOnCLickListener = movieOnClickListener;
+    public MovieAdapter(Context context, MovieOnClickListener listener){
+        mContext = context;
+        mMovieOnCLickListener = listener;
     }
 
     public interface MovieOnClickListener{
@@ -62,7 +62,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         View view = inflater.inflate(layout, null, shouldAttach);
 
-
         return new MovieViewHolder(view);
     }
 
@@ -92,7 +91,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     }
 
-    public void loadData(){
+    public void loadData(ArrayList<MovieModel> dataList){
+        mMovieDataList = dataList;
         notifyDataSetChanged();
     }
 

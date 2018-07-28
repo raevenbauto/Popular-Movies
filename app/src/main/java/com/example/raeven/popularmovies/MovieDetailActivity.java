@@ -1,5 +1,7 @@
 package com.example.raeven.popularmovies;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ActivityNotFoundException;
 
 import android.content.Intent;
@@ -77,7 +79,6 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
         mReviewsRecyclerView.setLayoutManager(reviewsLayoutManager);
         mReviewsRecyclerView.setHasFixedSize(false);
 
-
         myMovieData = (MovieModel) getIntent().getSerializableExtra("myMovieDetails");
         setTitle(myMovieData.getTitle());
         setValues(myMovieData);
@@ -87,11 +88,12 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 
         mDb = AppDatabase.getInstance(getApplicationContext());
         final int movieID = myMovieData.getMovieID();
-        AppExecutors.getInstance().diskIO().execute(new Runnable(){
 
+        final LiveData<MovieModel> movieDataCheck = mDb.movieDao().checkMovie(movieID);
+        movieDataCheck.observe(this, new Observer<MovieModel>() {
             @Override
-            public void run() {
-                if (mDb.movieDao().checkMovie(movieID)){
+            public void onChanged(@Nullable MovieModel movieModel) {
+                if (movieModel != null){
                     hideFavoriteButton();
                 }
             }

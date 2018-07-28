@@ -1,9 +1,12 @@
 package com.example.raeven.popularmovies;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 
 import android.net.ConnectivityManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -18,16 +21,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.raeven.popularmovies.Adapters.MovieAdapter;
 import com.example.raeven.popularmovies.Data.AppDatabase;
-import com.example.raeven.popularmovies.Loader.FavoritesLoader;
 import com.example.raeven.popularmovies.Loader.MoviesLoader;
+import com.example.raeven.popularmovies.Model.MainViewModel;
 import com.example.raeven.popularmovies.Model.MovieModel;
 import com.example.raeven.popularmovies.Utilities.NetworkUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
 
@@ -72,13 +75,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
+        mMovieAdapter = new MovieAdapter(this, this);
+        mRecyclerView.setAdapter(mMovieAdapter);
+
         mDb = AppDatabase.getInstance(getApplicationContext());
 
         CURR_LOADER = 1;
         setTitle(POPULAR_MOVIE_TITLE);
-        if (checkConnection())
-             getSupportLoaderManager().initLoader(POPULAR_MOVIE_LOADER, null, this);
-
+        if (checkConnection() && savedInstanceState == null) {
+            getSupportLoaderManager().initLoader(POPULAR_MOVIE_LOADER, null, this);
+            System.out.println("HELLO");
+        }
     }
 
     private int calculateBestSpanCount(int posterWidth) {
@@ -122,14 +129,34 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         pb_movieLoading =  (ProgressBar)findViewById(R.id.pb_movieLoading);
     }
 
+    private void setUpViewModel(){
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getFavorites().observe(this, new Observer<List<MovieModel>>() {
+            @Override
+            public void onChanged(@Nullable List<MovieModel> movieModels) {
+                if (getTitle() == FAVORITE_MOVIE_TITLE) {
+                    mMovieAdapter.loadData((ArrayList<MovieModel>) movieModels);
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void movieOnClick(MovieModel movieDetailsObject) {
+        Context context = this;
+        Class destinationClass = MovieDetailActivity.class;
+        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
+        intentToStartDetailActivity.putExtra("myMovieDetails", movieDetailsObject);
+        startActivity(intentToStartDetailActivity);
+    }
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null){
-            DISABLE_MENU_ITEM = savedInstanceState.getInt(MENU_DISABLE_KEY);
             int currentLoaderKey = savedInstanceState.getInt(CURR_LOADER_KEY);
-            getSupportLoaderManager().initLoader(currentLoaderKey, savedInstanceState, this);
+            DISABLE_MENU_ITEM = savedInstanceState.getInt(MENU_DISABLE_KEY);
 
             if (currentLoaderKey == POPULAR_MOVIE_LOADER)
                 setTitle(POPULAR_MOVIE_TITLE);
@@ -137,6 +164,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 setTitle(TOP_RATED_MOVIE_TITLE);
             else
                 setTitle(FAVORITE_MOVIE_TITLE);
+
+            if (currentLoaderKey != MOVIE_FAVORITE_LOADER) {
+                getSupportLoaderManager().initLoader(currentLoaderKey, savedInstanceState, this);
+            }
+
+            else {
+                setUpViewModel();
+            }
         }
     }
 
@@ -155,9 +190,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                 return new MoviesLoader(this, url);
             }
-            else if (id == MOVIE_FAVORITE_LOADER) {
-                return new FavoritesLoader(this, mDb);
-            }
         }
 
         return null;
@@ -166,19 +198,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onLoadFinished(Loader loader, Object data) {
 
-        if (loader.getId() == POPULAR_MOVIE_LOADER || loader.getId() == TOP_RATED_MOVIE_LOADER || loader.getId() == MOVIE_FAVORITE_LOADER) {
+        if (loader.getId() == POPULAR_MOVIE_LOADER || loader.getId() == TOP_RATED_MOVIE_LOADER) {
             System.out.println(loader.getId());
             System.out.println("onLoadFinished()");
-            mMovieAdapter = new MovieAdapter(this, (ArrayList<MovieModel>) data);
-            mRecyclerView.setAdapter(mMovieAdapter);
-            mMovieAdapter.loadData();
+            mMovieAdapter.loadData((ArrayList<MovieModel>)data);
         }
 
-        if (loader.getId() == MOVIE_FAVORITE_LOADER){
-            if (data.toString() == "[]")
-                Toast.makeText(this, "No favorites added.",
-                        Toast.LENGTH_LONG).show();
-        }
+        getSupportLoaderManager().destroyLoader(loader.getId());
         pb_movieLoading.setVisibility(View.GONE);
     }
 
@@ -244,10 +270,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 CURR_LOADER = MOVIE_FAVORITE_LOADER;
                 setTitle(FAVORITE_MOVIE_TITLE);
                 item.setEnabled(false);
+                setUpViewModel();
                 break;
         }
-        getSupportLoaderManager().destroyLoader(MOVIE_FAVORITE_LOADER);
-        getSupportLoaderManager().initLoader(CURR_LOADER, null, this);
+
+
+        if (CURR_LOADER != MOVIE_FAVORITE_LOADER){
+            getSupportLoaderManager().initLoader(CURR_LOADER, null, this);
+        }
+
         return true;
     }
 
@@ -275,17 +306,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         return true;
-    }
-
-
-
-    @Override
-    public void movieOnClick(MovieModel movieDetailsObject) {
-        Context context = this;
-        Class destinationClass = MovieDetailActivity.class;
-        Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-        intentToStartDetailActivity.putExtra("myMovieDetails", movieDetailsObject);
-        startActivity(intentToStartDetailActivity);
     }
 
 }
