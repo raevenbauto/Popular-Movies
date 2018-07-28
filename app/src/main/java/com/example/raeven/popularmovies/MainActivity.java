@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.net.ConnectivityManager;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private final String MENU_DISABLE_KEY = "no_menu_disable";
     private final String CURR_LOADER_KEY = "currLoaderKey";
+    private final String SAVED_LAYOUT_MANAGER_KEY = "savedLayoutManager";
 
     private static int CURR_LOADER = 0;
     private static int DISABLE_MENU_ITEM = 0;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final int MOVIE_FAVORITE_LOADER = 3;
 
     private AppDatabase mDb;
-
+    Parcelable layoutManagerSavedState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +82,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-        CURR_LOADER = 1;
-        setTitle(POPULAR_MOVIE_TITLE);
         if (checkConnection() && savedInstanceState == null) {
             getSupportLoaderManager().initLoader(POPULAR_MOVIE_LOADER, null, this);
+            CURR_LOADER = 1;
+            setTitle(POPULAR_MOVIE_TITLE);
+
             System.out.println("HELLO");
         }
     }
@@ -141,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         });
     }
 
+    private void restoreLayoutManagerPosition(){
+        if (layoutManagerSavedState != null){
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(layoutManagerSavedState);
+        }
+    }
+
 
     @Override
     public void movieOnClick(MovieModel movieDetailsObject) {
@@ -166,12 +175,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 setTitle(FAVORITE_MOVIE_TITLE);
 
             if (currentLoaderKey != MOVIE_FAVORITE_LOADER) {
+                System.out.println("TESTING");
                 getSupportLoaderManager().initLoader(currentLoaderKey, savedInstanceState, this);
             }
 
             else {
                 setUpViewModel();
             }
+
+            layoutManagerSavedState = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER_KEY);
         }
     }
 
@@ -206,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         getSupportLoaderManager().destroyLoader(loader.getId());
         pb_movieLoading.setVisibility(View.GONE);
+        restoreLayoutManagerPosition();
     }
 
 
@@ -232,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         outState.putInt(MENU_DISABLE_KEY, DISABLE_MENU_ITEM);
         outState.putInt(CURR_LOADER_KEY, CURR_LOADER);
+        outState.putParcelable(SAVED_LAYOUT_MANAGER_KEY, mRecyclerView.getLayoutManager().onSaveInstanceState());
     }
 
 
